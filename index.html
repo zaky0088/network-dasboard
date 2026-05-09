@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Fiber</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <h1 class="title">FIBER NETWORK DASHBOARD</h1>
+
+  <!-- FORM INPUT -->
+  <div class="form-box">
+    <input type="text" id="jalur" placeholder="Nama Jalur">
+    <input type="text" id="odp" placeholder="ODP">
+    <input type="number" id="core" placeholder="Core Used">
+    <input type="number" id="pot" placeholder="Pot">
+    <input type="text" id="teknisi" placeholder="Teknisi">
+
+    <select id="status">
+      <option value="Active">Active</option>
+      <option value="Maintenance">Maintenance</option>
+      <option value="Putus">Putus</option>
+    </select>
+
+    <button onclick="tambahData()">Tambah</button>
+  </div>
+
+  <!-- STATUS -->
+  <div class="status-bar">
+    <div>
+      <h2>by ASRILINK</h2>
+    </div>
+
+    <div id="jam"></div>
+
+    <div class="network-status">
+      <span class="dot"></span>
+      Network Normal
+    </div>
+  </div>
+
+  <!-- CARD -->
+  <div class="cards">
+
+    <div class="card blue">
+      <h3>Total Jalur</h3>
+      <p id="totalJalur">0</p>
+    </div>
+
+    <div class="card cyan">
+      <h3>Total Core Used</h3>
+      <p id="totalCore">0</p>
+    </div>
+
+    <div class="card red">
+      <h3>Jalur Putus</h3>
+      <p id="jalurPutus">0</p>
+    </div>
+
+    <button class="logout">Logout</button>
+
+  </div>
+
+  <!-- SEARCH -->
+  <input type="text" id="search" placeholder="Cari ODP / Jalur...">
+
+  <!-- TABLE -->
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Jalur</th>
+        <th>ODP</th>
+        <th>Core</th>
+        <th>Pot</th>
+        <th>Teknisi</th>
+        <th>Status</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+  </table>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
