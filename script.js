@@ -1,5 +1,3 @@
-localStorage.clear()
-
 let dataFiber = JSON.parse(localStorage.getItem("fiberData")) || [];
 
 let editIndex = -1;
