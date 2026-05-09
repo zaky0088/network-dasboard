@@ -56,6 +56,8 @@ function renderTable() {
   localStorage.setItem("fiberData", JSON.stringify(dataFiber));
 }
 
+let editIndex = null;
+
 function tambahData() {
 
   const jalur = document.getElementById("jalur").value;
@@ -64,11 +66,6 @@ function tambahData() {
   const pot = document.getElementById("pot").value;
   const teknisi = document.getElementById("teknisi").value;
   const status = document.getElementById("status").value;
-
-  if (!jalur || !odp) {
-    alert("Isi data dulu");
-    return;
-  }
 
   const dataBaru = {
     jalur,
@@ -79,26 +76,31 @@ function tambahData() {
     status
   };
 
-  // MODE EDIT
-  if (editIndex !== -1) {
+  // JIKA SEDANG EDIT
+  if (editIndex !== null) {
 
     dataFiber[editIndex] = dataBaru;
-    editIndex = -1;
+
+    editIndex = null;
 
   } else {
 
-    // MODE TAMBAH
+    // TAMBAH DATA BARU
     dataFiber.push(dataBaru);
 
   }
 
+  localStorage.setItem("fiberData", JSON.stringify(dataFiber));
+
   renderTable();
 
+  // RESET FORM
   document.getElementById("jalur").value = "";
   document.getElementById("odp").value = "";
   document.getElementById("core").value = "";
   document.getElementById("pot").value = "";
   document.getElementById("teknisi").value = "";
+
 }
 
 function editData(index) {
@@ -114,6 +116,7 @@ function editData(index) {
 
   // SIMPAN INDEX YANG DIEDIT
   editIndex = index;
+
 }
 
 // SEARCH
