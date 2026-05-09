@@ -148,6 +148,9 @@ function updateJam() {
 
   document.getElementById("jam").innerText = jam;
 }
+document.getElementById("btnTambah")
+.addEventListener("click", tambahData);
+
 
 setInterval(updateJam, 1000);
 updateJam();
