@@ -109,3 +109,4 @@ function hapusData(index) {
 }
 
 renderTable();
+localStorage.clear()
