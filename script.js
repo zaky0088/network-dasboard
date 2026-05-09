@@ -56,6 +56,8 @@ function renderTable() {
   localStorage.setItem("fiberData", JSON.stringify(dataFiber));
 }
 
+let editIndex = -1;
+
 function tambahData() {
 
   const jalur = document.getElementById("jalur").value;
@@ -70,14 +72,27 @@ function tambahData() {
     return;
   }
 
-  dataFiber.push({
+  const dataBaru = {
     jalur,
     odp,
     core,
     pot,
     teknisi,
     status
-  });
+  };
+
+  // MODE EDIT
+  if (editIndex !== -1) {
+
+    dataFiber[editIndex] = dataBaru;
+    editIndex = -1;
+
+  } else {
+
+    // MODE TAMBAH
+    dataFiber.push(dataBaru);
+
+  }
 
   renderTable();
 
@@ -86,11 +101,6 @@ function tambahData() {
   document.getElementById("core").value = "";
   document.getElementById("pot").value = "";
   document.getElementById("teknisi").value = "";
-}
-
-function hapusData(index) {
-  dataFiber.splice(index, 1);
-  renderTable();
 }
 
 function editData(index) {
@@ -104,8 +114,8 @@ function editData(index) {
   document.getElementById("teknisi").value = item.teknisi;
   document.getElementById("status").value = item.status;
 
-  dataFiber.splice(index, 1);
-  renderTable();
+  // SIMPAN INDEX YANG DIEDIT
+  editIndex = index;
 }
 
 // SEARCH
