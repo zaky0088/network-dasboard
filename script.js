@@ -1,35 +1,15 @@
-// LOAD DATA
 let dataFiber = JSON.parse(localStorage.getItem("fiberData")) || [];
 
-// MODE EDIT
-let currentEdit = null;
+let editIndex = -1;
 
-// RENDER TABLE
+// TAMPILKAN DATA
 function renderTable() {
 
   const tableBody = document.getElementById("tableBody");
+
   tableBody.innerHTML = "";
 
-  let totalCore = 0;
-  let jalurPutus = 0;
-
   dataFiber.forEach((item, index) => {
-
-    totalCore += Number(item.core || 0);
-
-    if (item.status === "Putus") {
-      jalurPutus++;
-    }
-
-    let statusClass = "active";
-
-    if (item.status === "Maintenance") {
-      statusClass = "maintenance";
-    }
-
-    if (item.status === "Putus") {
-      statusClass = "putus";
-    }
 
     const tr = document.createElement("tr");
 
@@ -40,17 +20,14 @@ function renderTable() {
       <td>${item.core}</td>
       <td>${item.pot}</td>
       <td>${item.teknisi}</td>
-
-      <td class="${statusClass}">
-        ${item.status}
-      </td>
+      <td>${item.status}</td>
 
       <td>
-        <button class="edit" onclick="editData(${index})">
+        <button onclick="editData(${index})">
           Edit
         </button>
 
-        <button class="delete" onclick="hapusData(${index})">
+        <button onclick="hapusData(${index})">
           Hapus
         </button>
       </td>
@@ -59,16 +36,13 @@ function renderTable() {
     tableBody.appendChild(tr);
   });
 
-  // UPDATE CARD
-  document.getElementById("totalJalur").innerText = dataFiber.length;
-  document.getElementById("totalCore").innerText = totalCore;
-  document.getElementById("jalurPutus").innerText = jalurPutus;
-
-  // SAVE
-  localStorage.setItem("fiberData", JSON.stringify(dataFiber));
+  localStorage.setItem(
+    "fiberData",
+    JSON.stringify(dataFiber)
+  );
 }
 
-// TAMBAH / UPDATE DATA
+// TAMBAH DATA
 function tambahData() {
 
   const jalur = document.getElementById("jalur").value;
@@ -77,11 +51,6 @@ function tambahData() {
   const pot = document.getElementById("pot").value;
   const teknisi = document.getElementById("teknisi").value;
   const status = document.getElementById("status").value;
-
-  if (!jalur || !odp) {
-    alert("Isi data dulu");
-    return;
-  }
 
   const dataBaru = {
     jalur,
@@ -93,13 +62,11 @@ function tambahData() {
   };
 
   // JIKA EDIT
-  if (currentEdit !== null) {
+  if (editIndex >= 0) {
 
-    dataFiber[currentEdit] = dataBaru;
+    dataFiber[editIndex] = dataBaru;
 
-    currentEdit = null;
-
-    document.getElementById("btnTambah").innerText = "Tambah";
+    editIndex = -1;
 
   } else {
 
@@ -118,10 +85,10 @@ function tambahData() {
   renderTable();
 }
 
-// EDIT DATA
+// EDIT
 function editData(index) {
 
-  currentEdit = index;
+  editIndex = index;
 
   const item = dataFiber[index];
 
@@ -131,11 +98,9 @@ function editData(index) {
   document.getElementById("pot").value = item.pot;
   document.getElementById("teknisi").value = item.teknisi;
   document.getElementById("status").value = item.status;
-
-  document.getElementById("btnTambah").innerText = "Update";
 }
 
-// HAPUS DATA
+// HAPUS
 function hapusData(index) {
 
   dataFiber.splice(index, 1);
@@ -143,43 +108,4 @@ function hapusData(index) {
   renderTable();
 }
 
-// SEARCH
-
-document.getElementById("search")
-.addEventListener("keyup", function() {
-
-  const keyword = this.value.toLowerCase();
-
-  const rows = document.querySelectorAll("tbody tr");
-
-  rows.forEach(row => {
-
-    const text = row.innerText.toLowerCase();
-
-    if (text.includes(keyword)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
-  });
-});
-
-// JAM DIGITAL
-function updateJam() {
-
-  const now = new Date();
-
-  document.getElementById("jam").innerText =
-    now.toLocaleTimeString("id-ID");
-}
-
-setInterval(updateJam, 1000);
-updateJam();
-
-// BUTTON EVENT
-
-document.getElementById("btnTambah")
-.addEventListener("click", tambahData);
-
-// START
 renderTable();
