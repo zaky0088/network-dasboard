@@ -56,8 +56,8 @@ function renderTable() {
   localStorage.setItem("fiberData", JSON.stringify(dataFiber));
 }
 
-console.log(editIndex);
-let editIndex = null;
+let editMode = false;
+let currentIndex = null;
 
 function tambahData() {
 
@@ -77,16 +77,17 @@ function tambahData() {
     status
   };
 
-  // JIKA SEDANG EDIT
-  if (editIndex !== null) {
+  // MODE EDIT
+  if (editMode === true) {
 
-    dataFiber[editIndex] = dataBaru;
+    dataFiber[currentIndex] = dataBaru;
 
-    editIndex = null;
+    editMode = false;
+    currentIndex = null;
 
   } else {
 
-    // TAMBAH DATA BARU
+    // MODE TAMBAH
     dataFiber.push(dataBaru);
 
   }
@@ -95,7 +96,7 @@ function tambahData() {
 
   renderTable();
 
-  // RESET FORM
+  // RESET INPUT
   document.getElementById("jalur").value = "";
   document.getElementById("odp").value = "";
   document.getElementById("core").value = "";
@@ -115,8 +116,8 @@ function editData(index) {
   document.getElementById("teknisi").value = item.teknisi;
   document.getElementById("status").value = item.status;
 
-  // SIMPAN INDEX YANG DIEDIT
-  editIndex = index;
+  editMode = true;
+  currentIndex = index;
 
 }
 
