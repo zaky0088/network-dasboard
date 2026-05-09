@@ -1,5 +1,10 @@
+// LOAD DATA
 let dataFiber = JSON.parse(localStorage.getItem("fiberData")) || [];
 
+// MODE EDIT
+let currentEdit = null;
+
+// RENDER TABLE
 function renderTable() {
 
   const tableBody = document.getElementById("tableBody");
@@ -10,13 +15,11 @@ function renderTable() {
 
   dataFiber.forEach((item, index) => {
 
-    totalCore += Number(item.core);
+    totalCore += Number(item.core || 0);
 
     if (item.status === "Putus") {
       jalurPutus++;
     }
-
-    const tr = document.createElement("tr");
 
     let statusClass = "active";
 
@@ -27,6 +30,8 @@ function renderTable() {
     if (item.status === "Putus") {
       statusClass = "putus";
     }
+
+    const tr = document.createElement("tr");
 
     tr.innerHTML = `
       <td>${index + 1}</td>
@@ -41,24 +46,29 @@ function renderTable() {
       </td>
 
       <td>
-        <button class="edit" onclick="editData(${index})">Edit</button>
-        <button class="delete" onclick="hapusData(${index})">Hapus</button>
+        <button class="edit" onclick="editData(${index})">
+          Edit
+        </button>
+
+        <button class="delete" onclick="hapusData(${index})">
+          Hapus
+        </button>
       </td>
     `;
 
     tableBody.appendChild(tr);
   });
 
+  // UPDATE CARD
   document.getElementById("totalJalur").innerText = dataFiber.length;
   document.getElementById("totalCore").innerText = totalCore;
   document.getElementById("jalurPutus").innerText = jalurPutus;
 
+  // SAVE
   localStorage.setItem("fiberData", JSON.stringify(dataFiber));
 }
 
-let editMode = false;
-let currentIndex = null;
-
+// TAMBAH / UPDATE DATA
 function tambahData() {
 
   const jalur = document.getElementById("jalur").value;
@@ -67,6 +77,11 @@ function tambahData() {
   const pot = document.getElementById("pot").value;
   const teknisi = document.getElementById("teknisi").value;
   const status = document.getElementById("status").value;
+
+  if (!jalur || !odp) {
+    alert("Isi data dulu");
+    return;
+  }
 
   const dataBaru = {
     jalur,
@@ -77,24 +92,21 @@ function tambahData() {
     status
   };
 
-  // MODE EDIT
-  if (editMode === true) {
+  // JIKA EDIT
+  if (currentEdit !== null) {
 
-    dataFiber[currentIndex] = dataBaru;
+    dataFiber[currentEdit] = dataBaru;
 
-    editMode = false;
-    currentIndex = null;
+    currentEdit = null;
+
+    document.getElementById("btnTambah").innerText = "Tambah";
 
   } else {
 
-    // MODE TAMBAH
+    // TAMBAH BARU
     dataFiber.push(dataBaru);
 
   }
-
-  localStorage.setItem("fiberData", JSON.stringify(dataFiber));
-
-  renderTable();
 
   // RESET INPUT
   document.getElementById("jalur").value = "";
@@ -103,9 +115,13 @@ function tambahData() {
   document.getElementById("pot").value = "";
   document.getElementById("teknisi").value = "";
 
+  renderTable();
 }
 
+// EDIT DATA
 function editData(index) {
+
+  currentEdit = index;
 
   const item = dataFiber[index];
 
@@ -116,16 +132,24 @@ function editData(index) {
   document.getElementById("teknisi").value = item.teknisi;
   document.getElementById("status").value = item.status;
 
-  editMode = true;
-  currentIndex = index;
+  document.getElementById("btnTambah").innerText = "Update";
+}
 
+// HAPUS DATA
+function hapusData(index) {
+
+  dataFiber.splice(index, 1);
+
+  renderTable();
 }
 
 // SEARCH
 
-document.getElementById("search").addEventListener("keyup", function() {
+document.getElementById("search")
+.addEventListener("keyup", function() {
 
   const keyword = this.value.toLowerCase();
+
   const rows = document.querySelectorAll("tbody tr");
 
   rows.forEach(row => {
@@ -141,20 +165,21 @@ document.getElementById("search").addEventListener("keyup", function() {
 });
 
 // JAM DIGITAL
-
 function updateJam() {
 
   const now = new Date();
 
-  const jam = now.toLocaleTimeString("id-ID");
-
-  document.getElementById("jam").innerText = jam;
+  document.getElementById("jam").innerText =
+    now.toLocaleTimeString("id-ID");
 }
-document.getElementById("btnTambah")
-.addEventListener("click", tambahData);
-
 
 setInterval(updateJam, 1000);
 updateJam();
 
+// BUTTON EVENT
+
+document.getElementById("btnTambah")
+.addEventListener("click", tambahData);
+
+// START
 renderTable();
