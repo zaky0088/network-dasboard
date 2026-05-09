@@ -56,6 +56,7 @@ function renderTable() {
   localStorage.setItem("fiberData", JSON.stringify(dataFiber));
 }
 
+console.log(editIndex);
 let editIndex = null;
 
 function tambahData() {
