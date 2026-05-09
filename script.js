@@ -1,3 +1,5 @@
+localStorage.clear()
+
 let dataFiber = JSON.parse(localStorage.getItem("fiberData")) || [];
 
 let editIndex = -1;
@@ -109,4 +111,3 @@ function hapusData(index) {
 }
 
 renderTable();
-localStorage.clear()
